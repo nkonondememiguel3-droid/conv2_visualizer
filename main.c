@@ -30,6 +30,7 @@
 
 int main(int argc, char *argv[]) {
 
+  int window_width = 1600, window_height = 900;
   app_t app = (app_t){.is_running = true};
 
   struct nk_context *ctx = NULL;
@@ -38,8 +39,8 @@ int main(int argc, char *argv[]) {
     error("Failed to initialized the sdl3 library. [%s]", SDL_GetError());
   }
 
-  if (!SDL_CreateWindowAndRenderer("Nuklear Template", WINDOW_WIDTH,
-                                   WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE,
+  if (!SDL_CreateWindowAndRenderer("Nuklear Template", window_width,
+                                   window_height, SDL_WINDOW_RESIZABLE,
                                    &app.window, &app.renderer)) {
     error("Failed to create window/renderer. [%s]", SDL_GetError());
   }
@@ -61,8 +62,15 @@ int main(int argc, char *argv[]) {
           (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)) {
         app.is_running = false;
       }
+      switch (event.type) {
+        /* case SDL_EVENT_WINDOW_RESIZED: */
+        /*   window_width = event.window.data1; */
+        /*   window_height = event.window.data2; */
+        /*   break; */
+      }
       nk_sdl_handle_event(ctx, &event);
     }
+    SDL_GetWindowSize(app.window, &window_width, &window_height);
     nk_sdl_update_TextInput(ctx);
     nk_input_end(ctx);
 
@@ -70,6 +78,13 @@ int main(int argc, char *argv[]) {
     SDL_SetRenderDrawColor(app.renderer, 250, 250, 250, 250);
     SDL_RenderClear(app.renderer);
 
+    // main window
+    if (nk_begin(ctx, "main_window", nk_rect(0, 0, window_width, window_height),
+                 NK_WINDOW_NO_SCROLLBAR)) {
+      nk_layout_row_dynamic(ctx, 30, 1);
+      nk_label(ctx, "Hello, world", NK_TEXT_CENTERED);
+    }
+    nk_end(ctx);
     nk_sdl_render(ctx, NK_ANTI_ALIASING_ON);
 
     SDL_RenderPresent(app.renderer);
