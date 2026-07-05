@@ -10,6 +10,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "app.h"
 
@@ -30,10 +31,18 @@
 
 int main(int argc, char *argv[])
 {
-
-  app_t app = (app_t){.is_running = true};
-
+  srand(time(NULL));
+  app_t app = (app_t){
+      .is_running = true,
+  };
   struct nk_context *ctx = NULL;
+
+  // just a test simulating a tensor image pixels data
+  float *tensor_data = malloc(sizeof(float) * 64 * 64);
+  if (!tensor_data)
+    return EXIT_FAILURE;
+  for (int i = 0; i < 64 * 64; i++)
+    tensor_data[i] = (float)(rand() % 100 + 1);
 
   if (!SDL_Init(SDL_INIT_VIDEO))
   {
@@ -78,6 +87,8 @@ int main(int argc, char *argv[])
     // render
     SDL_SetRenderDrawColor(app.renderer, 250, 250, 250, 250);
     SDL_RenderClear(app.renderer);
+
+    render_image_pixels(ctx, tensor_data, 64, 64);
 
     nk_sdl_render(ctx, NK_ANTI_ALIASING_ON);
 
