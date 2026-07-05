@@ -1,0 +1,6 @@
+# ninja log v7
+31	514	8049443777621778	CMakeFiles/conv2_visualizer.dir/app.c.obj	eb8018049a4c749
+18	527	8049443777491904	CMakeFiles/conv2_visualizer.dir/config.c.obj	361696d7c25cf5b0
+25	535	8049443777561902	CMakeFiles/conv2_visualizer.dir/widget.c.obj	343b15cc657b2f3d
+11	1305	8049443777422589	CMakeFiles/conv2_visualizer.dir/main.c.obj	78cdd4ab353ce065
+1306	1449	8049443790361386	conv2_visualizer.exe	be4537e7011f08a2

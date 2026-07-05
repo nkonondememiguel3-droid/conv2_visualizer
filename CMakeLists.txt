@@ -7,6 +7,11 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(CMAKE_HOST_WIN32)
+	list(APPEND CMAKE_PREFIX_PATH "C:/softwares/SDL3")
+endif(CMAKE_HOST_WIN32)
+
+
 find_package(SDL3 REQUIRED CONFIG)
 
 # add the nuklear library
@@ -17,13 +22,21 @@ add_executable(
 	main.c
 	config.c
 	widget.c
+    app.c
 )
 
 target_link_libraries(
 	${PROJECT_NAME} PUBLIC
 	nuklear_lib
-	m
 )
+
+if(NOT WIN32)
+    target_link_libraries(
+        ${PROJECT_NAME} PRIVATE
+        m
+    )
+endif()
+
 target_include_directories(
 	${PROJECT_NAME} PRIVATE
 	include/

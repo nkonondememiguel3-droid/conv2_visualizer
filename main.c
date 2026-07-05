@@ -28,19 +28,25 @@
 #include "config.h"
 #include "uis/widget.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
   app_t app = (app_t){.is_running = true};
 
   struct nk_context *ctx = NULL;
 
-  if (!SDL_Init(SDL_INIT_VIDEO)) {
+  if (!SDL_Init(SDL_INIT_VIDEO))
+  {
     error("Failed to initialized the sdl3 library. [%s]", SDL_GetError());
   }
 
-  if (!SDL_CreateWindowAndRenderer("Nuklear Template", WINDOW_WIDTH,
-                                   WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE,
-                                   &app.window, &app.renderer)) {
+  if (!SDL_CreateWindowAndRenderer(
+          "Nuklear Template",
+          WINDOW_WIDTH,
+          WINDOW_HEIGHT,
+          SDL_WINDOW_RESIZABLE,
+          &app.window, &app.renderer))
+  {
     error("Failed to create window/renderer. [%s]", SDL_GetError());
   }
 
@@ -52,13 +58,16 @@ int main(int argc, char *argv[]) {
 
   bool show_template = true, show_example = true;
 
-  while (app.is_running) {
+  while (app.is_running)
+  {
     // event handler
     nk_input_begin(ctx);
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event))
+    {
       if (event.type == SDL_EVENT_QUIT ||
-          (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)) {
+          (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE))
+      {
         app.is_running = false;
       }
       nk_sdl_handle_event(ctx, &event);
