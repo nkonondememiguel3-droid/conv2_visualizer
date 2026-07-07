@@ -78,7 +78,7 @@ _tensor_t *tensor_random_normal(_ds_arena_t_ *arena, int dimension, const int sh
         return NULL;
     }
 
-    for (int i = 0; i < tensor->size; i++)
+    for (int i = 0; i < tensor->size; i += 2)
     {
         float u_1 = (float)rand() / (float)RAND_MAX;
         float u_2 = (float)rand() / (float)RAND_MAX;

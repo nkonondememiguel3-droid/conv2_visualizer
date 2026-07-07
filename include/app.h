@@ -13,6 +13,7 @@ typedef struct {
   bool is_running;
 } app_t;
 
-extern void error(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+// extern void error(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+extern void error(const char* fmt, ...);
 
 #endif // !app_h
