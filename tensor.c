@@ -14,7 +14,7 @@ static void compute_strides(_tensor_t *tensor)
     // the stride are computed from right to left.
     tensor->strides[tensor->dimension - 1] = 1;
     for (int i = tensor->dimension - 2; i >= 0; i--)
-        tensor->strides[i] = tensor->strides[i + 1] + tensor->shape[i + 1];
+        tensor->strides[i] = tensor->strides[i + 1] * tensor->shape[i + 1];
 }
 
 _tensor_t *tensor_create(_ds_arena_t_ *arena, int dimension, const int shape[])
@@ -46,6 +46,9 @@ _tensor_t *tensor_create(_ds_arena_t_ *arena, int dimension, const int shape[])
         tensor->size *= shape[i];
     }
     compute_strides(tensor); // compute the strides for this tensor.
+
+    // allocate just enough memory for the actual tensor data.
+    tensor->data = ARENA_ARRAY(arena, float, tensor->size);
 
     return tensor;
 }

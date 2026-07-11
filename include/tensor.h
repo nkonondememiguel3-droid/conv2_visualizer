@@ -1,5 +1,5 @@
 #ifndef conv2_visualizer_tensor_h
-#define con2_visualizer_tensor_h
+#define conv2_visualizer_tensor_h
 
 #include <ds_arena.h>
 

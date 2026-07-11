@@ -28,6 +28,7 @@
 
 #include "config.h"
 #include "uis/widget.h"
+#include "tensor.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,12 +38,9 @@ int main(int argc, char *argv[])
   };
   struct nk_context *ctx = NULL;
 
-  // just a test simulating a tensor image pixels data
-  float *tensor_data = malloc(sizeof(float) * 64 * 64);
-  if (!tensor_data)
-    return EXIT_FAILURE;
-  for (int i = 0; i < 64 * 64; i++)
-    tensor_data[i] = (float)(rand() % 100 + 1);
+  _ds_arena_t_ arena = ds_arena_new(0);
+  const int shape[] = {64, 64};
+  _tensor_t *tensor = tensor_create(&arena, 2, shape);
 
   if (!SDL_Init(SDL_INIT_VIDEO))
   {
@@ -88,13 +86,15 @@ int main(int argc, char *argv[])
     SDL_SetRenderDrawColor(app.renderer, 250, 250, 250, 250);
     SDL_RenderClear(app.renderer);
 
-    render_image_pixels(ctx, tensor_data, 64, 64);
+    // render_image_pixels(ctx, tensor_data, 64, 64);
+    render_image(ctx, tensor);
 
     nk_sdl_render(ctx, NK_ANTI_ALIASING_ON);
 
     SDL_RenderPresent(app.renderer);
   }
 
+  ds_arena_destroy(&arena);
   if (ctx)
     nk_sdl_shutdown(ctx);
   SDL_DestroyRenderer(app.renderer);

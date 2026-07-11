@@ -89,3 +89,8 @@ void render_image_pixels(struct nk_context *ctx, const float *tensor_data, int w
   }
   nk_end(ctx);
 }
+
+void render_image(struct nk_context *ctx, _tensor_t *tensor)
+{
+  render_image_pixels(ctx, tensor->data, tensor->shape[0], tensor->shape[1]);
+}

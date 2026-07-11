@@ -61,6 +61,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
 add_library(
 	conv2_lib
     tensor.c
+    include/operation.h
+    operation.c
 )
 target_include_directories(
 	conv2_lib PUBLIC
