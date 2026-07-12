@@ -32,6 +32,10 @@
 
 int main(int argc, char *argv[])
 {
+
+  (void) argc;
+  (void) argv;
+
   srand(time(NULL));
   app_t app = (app_t){
       .is_running = true,
@@ -62,8 +66,6 @@ int main(int argc, char *argv[])
 
   // Load font
   load_font(ctx);
-
-  bool show_template = true, show_example = true;
 
   while (app.is_running)
   {
