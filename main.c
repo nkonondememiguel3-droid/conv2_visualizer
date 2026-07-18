@@ -10,8 +10,10 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "app.h"
+#include "ds_arena.h"
 
 #define NK_INCLUDE_STANDARD_VARARGS
 #define NK_INCLUDE_STANDARD_IO
@@ -26,37 +28,57 @@
 #include "nuklear_sdl3_renderer.h"
 
 #include "config.h"
+#include "tensor.h"
 #include "uis/widget.h"
 
-int main(int argc, char *argv[]) {
+int main( int argc, char *argv[] )
+{
 
+<<<<<<< HEAD
   int window_width = 1600, window_height = 900;
   app_t app = (app_t){.is_running = true};
+=======
+  (void)argc;
+  (void)argv;
+>>>>>>> main
 
+  srand( time( NULL ) );
+  app_t app = ( app_t ){
+    .is_running = true,
+  };
   struct nk_context *ctx = NULL;
 
-  if (!SDL_Init(SDL_INIT_VIDEO)) {
-    error("Failed to initialized the sdl3 library. [%s]", SDL_GetError());
-  }
+  /* _ds_arena_t_ arena = ds_arena_new(0); */
+  _ds_arena_t_ arena = ds_arena_new_with_allocator( 0, alloc_mkl, realloc_mkl, free_mkl, NULL );
+  const int shape[] = { 64, 64 };
+  _tensor_t *tensor = tensor_create( &arena, 2, shape );
 
+<<<<<<< HEAD
   if (!SDL_CreateWindowAndRenderer("Nuklear Template", window_width,
                                    window_height, SDL_WINDOW_RESIZABLE,
                                    &app.window, &app.renderer)) {
     error("Failed to create window/renderer. [%s]", SDL_GetError());
+=======
+  if ( !SDL_Init( SDL_INIT_VIDEO ) ) { error( "Failed to initialized the sdl3 library. [%s]", SDL_GetError() ); }
+
+  if ( !SDL_CreateWindowAndRenderer( "Nuklear Template", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, &app.window, &app.renderer ) )
+  {
+    error( "Failed to create window/renderer. [%s]", SDL_GetError() );
+>>>>>>> main
   }
 
   // gui
-  ctx = nk_sdl_init(app.window, app.renderer, nk_sdl_allocator());
+  ctx = nk_sdl_init( app.window, app.renderer, nk_sdl_allocator() );
 
   // Load font
-  load_font(ctx);
+  load_font( ctx );
 
-  bool show_template = true, show_example = true;
-
-  while (app.is_running) {
+  while ( app.is_running )
+  {
     // event handler
-    nk_input_begin(ctx);
+    nk_input_begin( ctx );
     SDL_Event event;
+<<<<<<< HEAD
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_EVENT_QUIT ||
           (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)) {
@@ -73,11 +95,21 @@ int main(int argc, char *argv[]) {
     SDL_GetWindowSize(app.window, &window_width, &window_height);
     nk_sdl_update_TextInput(ctx);
     nk_input_end(ctx);
+=======
+    while ( SDL_PollEvent( &event ) )
+    {
+      if ( event.type == SDL_EVENT_QUIT || ( event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE ) ) { app.is_running = false; }
+      nk_sdl_handle_event( ctx, &event );
+    }
+    nk_sdl_update_TextInput( ctx );
+    nk_input_end( ctx );
+>>>>>>> main
 
     // render
-    SDL_SetRenderDrawColor(app.renderer, 250, 250, 250, 250);
-    SDL_RenderClear(app.renderer);
+    SDL_SetRenderDrawColor( app.renderer, 250, 250, 250, 250 );
+    SDL_RenderClear( app.renderer );
 
+<<<<<<< HEAD
     // main window
     if (nk_begin(ctx, "main_window", nk_rect(0, 0, window_width, window_height),
                  NK_WINDOW_NO_SCROLLBAR)) {
@@ -86,14 +118,20 @@ int main(int argc, char *argv[]) {
     }
     nk_end(ctx);
     nk_sdl_render(ctx, NK_ANTI_ALIASING_ON);
+=======
+    // render_image_pixels(ctx, tensor_data, 64, 64);
+    render_image( ctx, tensor );
+>>>>>>> main
 
-    SDL_RenderPresent(app.renderer);
+    nk_sdl_render( ctx, NK_ANTI_ALIASING_ON );
+
+    SDL_RenderPresent( app.renderer );
   }
 
-  if (ctx)
-    nk_sdl_shutdown(ctx);
-  SDL_DestroyRenderer(app.renderer);
-  SDL_DestroyWindow(app.window);
+  ds_arena_destroy( &arena );
+  if ( ctx ) nk_sdl_shutdown( ctx );
+  SDL_DestroyRenderer( app.renderer );
+  SDL_DestroyWindow( app.window );
   SDL_Quit();
   return EXIT_SUCCESS;
 }

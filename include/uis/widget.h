@@ -1,12 +1,15 @@
 #ifndef widget_h
 #define widget_h
 
+#include "tensor.h"
 #include <stdbool.h>
+
 struct nk_context;
 
-bool hello_world(struct nk_context *ctx);
-bool example(struct nk_context *ctx);
+bool hello_world( struct nk_context *ctx );
+bool example( struct nk_context *ctx );
 
-void image_view(struct nk_context *ctx, float x, float y, float width, float height);
+void render_image_pixels( struct nk_context *ctx, const float *tensor_data, int width, int height );
+void render_image( struct nk_context *ctx, _tensor_t *tensor );
 
 #endif // !widget_h
